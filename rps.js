@@ -4,6 +4,9 @@ let player_choice = '';
 let wins = 0;
 let losses = 0;
 let win_percentage = 0;
+let streak = 0;
+let highest_winstreak = 0;
+let highest_winstreak_odds = 1;
 
 let user_rock = document.getElementById("user-rock");
 let user_paper = document.getElementById("user-paper");
@@ -12,6 +15,9 @@ const result_text = document.getElementById("result");
 const wins_text = document.getElementById("wins");
 const losses_text = document.getElementById("losses");
 const win_percentage_text = document.getElementById("win-percentage");
+const streak_text = document.getElementById("streak");
+const highest_winstreak_text = document.getElementById("highest-streak");
+const highest_winstreak_odds_text = document.getElementById("highest-streak-odds");
 
 const choices = ["cpu-rock", "cpu-paper", "cpu-scissors"];
 
@@ -135,18 +141,46 @@ function win () {
     wins += 1;
     console.log(win_percentage);
     win_percentage = wins / (wins + losses) * 100;
+    if(streak > 0){
+        streak += 1;
+    }
+    else {
+        streak = 1;
+    }
+    if(streak > highest_winstreak){
+        highest_winstreak = streak;
+        highest_winstreak_odds = (Math.pow(2, highest_winstreak));
+    }
+
     wins_text.innerHTML = "Wins: " + wins;
     win_percentage_text.innerHTML = "Win Percentage: " + Math.floor(win_percentage) + "%";
+    streak_text.innerHTML = "Win Streak: " + Math.abs(streak);
+    highest_winstreak_text.innerHTML = "Highest Winstreak: " + highest_winstreak;
+    highest_winstreak_odds_text.innerHTML = "(1 in " + highest_winstreak_odds + " chance)";
+
+    determineColor();
+
     user_rock.addEventListener('click', () => {
         firstPress();
     })
 }
+
 function loss () {
     result_text.innerHTML = "You lose. Play again by pressing rock.";
     losses += 1;
     win_percentage = wins / (wins + losses) * 100;
+    if(streak < 0){
+        streak -= 1;
+    }
+    else {
+        streak = -1;
+    }
     losses_text.innerHTML = "Losses: " + losses;
     win_percentage_text.innerHTML = "Win Percentage: " + Math.floor(win_percentage) + "%";
+    streak_text.innerHTML = "Loss Streak: " + Math.abs(streak);
+
+    determineColor();
+
     user_rock.addEventListener('click', () => {
         firstPress();
     })
@@ -167,4 +201,40 @@ function clearListeners(){
     user_rock = removeAllListeners(user_rock);
     user_paper = removeAllListeners(user_paper);
     user_scissors = removeAllListeners(user_scissors);
+}
+
+function getCookie(wins, losses){
+    
+}
+function setCookie(wins, losses) {
+    
+}
+
+function determineColor() {
+    if(streak <= -3 && streak > -5){
+        document.body.style.backgroundColor = "rgb(161, 161, 255)";
+    }
+    if(streak <= -5){
+        document.body.style.backgroundColor = "rgb(66, 66, 218)";
+    }
+    if(streak >= 3 && streak < 5){
+        document.body.style.backgroundColor = "rgb(255, 255, 0)";
+    }
+    if(streak >= 5){
+        document.body.style.backgroundColor = "rgb(251, 67, 0)";
+    }
+    if(streak >= 10){
+        document.body.style.backgroundColor = "#940f00";
+    }
+    if(streak >= 15){
+        document.body.style.backgroundColor = "#77029e";
+    }
+    if(streak >= 20){
+        document.body.style.backgroundColor = "#21db72";
+    }
+
+    if (streak < 3 && streak > -3){
+        document.body.style.backgroundColor = "#ffffff";
+    }
+
 }
