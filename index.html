@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <img class="logo" src="images/rock-paper-scissors.png">
+    <h1>Rock, Paper, Scissors!</h1>
+    <h3>You</h3>
+
+    <div class="you-controls">
+        
+        <button id="user-rock" onClick="userSelect('user-rock')"><img class="icon" src="images/rock-icon.png"></button>
+        <button id="user-paper" onClick="userSelect('user-paper')"><img class="icon" src="images/paper-icon.png"></button>
+        <button id="user-scissors" onClick="userSelect('user-scissors')"><img class="icon" src="images/scissors-icon.png"></button>
+    </div>
+    
+    <h3>Computer</h3>
+
+    <div class="computer-controls">
+        <button id="cpu-rock"><img class="icon" src="images/rock-icon.png"></button>
+        <button id="cpu-paper"><img class="icon" src="images/paper-icon.png"></button>
+        <button id="cpu-scissors"><img class="icon" src="images/scissors-icon.png"></button>
+    </div>
+   
+    
+    <p id="result">Click rock three times, then SHOOT with your choice!</p>
+    <p id="play-again"></p>
+
+    <div class="stats">
+        <h4>Stats</h4>
+        <p id="wins">Wins: 0</p>
+        <p id="losses">Losses: 0</p>
+        <p id="win-percentage">Win Percentage: 0%</p>
+    </div>
+    
+
+    <script src="rps.js"></script>
+</body>
+</html>
