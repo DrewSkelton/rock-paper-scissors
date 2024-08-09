@@ -18,8 +18,11 @@ const win_percentage_text = document.getElementById("win-percentage");
 const streak_text = document.getElementById("streak");
 const highest_winstreak_text = document.getElementById("highest-streak");
 const highest_winstreak_odds_text = document.getElementById("highest-streak-odds");
-
 const choices = ["cpu-rock", "cpu-paper", "cpu-scissors"];
+
+window.onload = function() {
+    loadGameData();
+};
 
 user_rock.addEventListener('click', () => {
     user_rock = removeAllListeners(user_rock);
@@ -151,15 +154,13 @@ function win () {
         highest_winstreak = streak;
         highest_winstreak_odds = (Math.pow(2, highest_winstreak));
     }
-
     wins_text.innerHTML = "Wins: " + wins;
     win_percentage_text.innerHTML = "Win Percentage: " + Math.floor(win_percentage) + "%";
     streak_text.innerHTML = "Win Streak: " + Math.abs(streak);
     highest_winstreak_text.innerHTML = "Highest Winstreak: " + highest_winstreak;
     highest_winstreak_odds_text.innerHTML = "(1 in " + highest_winstreak_odds + " chance)";
-
+    saveGameData();
     determineColor();
-
     user_rock.addEventListener('click', () => {
         firstPress();
     })
@@ -175,12 +176,11 @@ function loss () {
     else {
         streak = -1;
     }
+    saveGameData();
     losses_text.innerHTML = "Losses: " + losses;
     win_percentage_text.innerHTML = "Win Percentage: " + Math.floor(win_percentage) + "%";
     streak_text.innerHTML = "Loss Streak: " + Math.abs(streak);
-
     determineColor();
-
     user_rock.addEventListener('click', () => {
         firstPress();
     })
@@ -201,13 +201,6 @@ function clearListeners(){
     user_rock = removeAllListeners(user_rock);
     user_paper = removeAllListeners(user_paper);
     user_scissors = removeAllListeners(user_scissors);
-}
-
-function getCookie(wins, losses){
-    
-}
-function setCookie(wins, losses) {
-    
 }
 
 function determineColor() {
@@ -238,3 +231,49 @@ function determineColor() {
     }
 
 }
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + ";" + expires + ";path=/";
+}
+function saveGameData() {
+    setCookie("wins", wins, 365);
+    setCookie("losses", losses, 365);
+    setCookie("streak", streak, 365);
+    setCookie("win_percentage", win_percentage, 365);
+    setCookie("highest_winstreak", highest_winstreak, 365);
+    setCookie("highest_winstreak_odds", highest_winstreak_odds, 365);
+}
+function loadGameData() {
+    wins = parseInt(getCookie("wins") || 0);
+    losses = parseInt(getCookie("losses") || 0);
+    win_percentage = parseInt(getCookie("win_percentage") || 0);
+    streak = parseInt(getCookie("streak") || 0);
+    highest_winstreak = parseInt(getCookie("highest_winstreak") || 0);
+    highest_winstreak_odds = parseFloat(getCookie("highest_winstreak_odds") || 1);
+    
+    wins_text.innerHTML = "Wins: " + wins;
+    streak_text.innerHTML = "Win Streak: " + Math.abs(streak);
+    losses_text.innerHTML = "Losses: " + losses;
+    streak_text.innerHTML = "Loss Streak: " + Math.abs(streak);
+    win_percentage_text.innerHTML = "Win Percentage: " + Math.floor(win_percentage) + "%";
+    highest_winstreak_text.innerHTML = "Highest Winstreak: " + highest_winstreak;
+    highest_winstreak_odds_text.innerHTML = "(1 in " + highest_winstreak_odds + " chance)";
+}
+
+
